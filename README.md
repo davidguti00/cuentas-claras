@@ -1,70 +1,45 @@
-# Getting Started with Create React App
+# Cuentas Claras
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Cuentas Claras es una aplicación desarrollada en JavaScript utilizando React y Material-UI. Te permite dividir los gastos entre usuarios, especificando qué usuario le debe a cada otro usuario un monto determinado. La aplicación te ayuda a mantener un registro claro de quién debe dinero a quién y te permite saldar las cuentas de manera equitativa.
 
-## Available Scripts
+![Cuentas Claras](./src/tituloCuentasClaras.png)
 
-In the project directory, you can run:
+## Características
 
-### `npm start`
+- Registro de gastos individuales para cada usuario.
+- Cálculo automático de deudas y acreedores.
+- Generación de un informe detallado de quién debe a quién y el monto correspondiente.
+- Funcionalidad para saldar las cuentas de manera equitativa.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Tecnologías utilizadas
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Lenguaje de programación: JavaScript
+- Biblioteca de desarrollo web: React
+- Componentes de interfaz: Material-UI
 
-### `npm test`
+## Captura de pantalla
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+![Captura de pantalla 1](./src/Captura%20Cuentas-Claras.png)
+_Diseño responsive._
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Instalación
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. Clona el repositorio: `git clone https://github.com/davidguti00/cuentas-claras.git`
+2. Ve al directorio del proyecto: `cd cuentas-claras`
+3. Instala las dependencias: `npm install`
+4. Inicia la aplicación: `npm start`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Contribución
 
-### `npm run eject`
+Las contribuciones son bienvenidas. Si deseas contribuir a Cuentas Claras, por favor sigue estos pasos:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+1. Crea un fork del repositorio.
+2. Crea una rama para tu contribución: `git checkout -b mi-contribucion`
+3. Realiza los cambios y commitea tus modificaciones: `git commit -m "Descripción de los cambios"`
+4. Sube tus cambios al repositorio remoto: `git push origin mi-contribucion`
+5. Abre un pull request en GitHub describiendo tus cambios.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Licencia
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Este proyecto está bajo la licencia [MIT](https://opensource.org/licenses/MIT).
