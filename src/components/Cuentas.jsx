@@ -84,7 +84,6 @@ export default function Cuentas() {
     };
 
     const reemplazarComa = (numero) => {
-        console.log("El tipo de dato es....",typeof numero)
         if(!validaciones.numerosValidos.test(numero)){
             Swal.fire({
                 html:'Por favor, <br>ingresa un número valido',
@@ -93,7 +92,6 @@ export default function Cuentas() {
                 grow:'row',
                 toast:true,
                 position:'top',
-                allowOutsideClick:'false',
                 allowEscapeKey:'false',
                 showConfirmButton: false,
                 timer: 3000,
@@ -154,7 +152,7 @@ export default function Cuentas() {
                     grow:'row',
                     toast:true,
                     position:'top',
-                    allowOutsideClick:'false',
+                    
                     allowEscapeKey:'false',
                     showConfirmButton: false,
                     timer: 3000,
@@ -170,7 +168,7 @@ export default function Cuentas() {
                 grow:'row',
                 toast:true,
                 position:'top',
-                allowOutsideClick:'false',
+                
                 allowEscapeKey:'false',
                 showConfirmButton: false,
                 timer: 4000,
@@ -196,7 +194,7 @@ export default function Cuentas() {
                     grow:'row',
                     toast:true,
                     position:'top',
-                    allowOutsideClick:'false',
+                    
                     allowEscapeKey:'false',
                     showConfirmButton: false,
                     timer: 3000,
@@ -212,7 +210,7 @@ export default function Cuentas() {
                 grow:'row',
                 toast:true,
                 position:'top',
-                allowOutsideClick:'false',
+                
                 allowEscapeKey:'false',
                 showConfirmButton: false,
                 timer: 4000,

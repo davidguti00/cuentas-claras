@@ -9,14 +9,18 @@ import {
 } from '@mui/material'
 
 
+
+const apiKey = '613212145285165';
+const apiSecret = 'zbzJWO1YOWpHYQEYXnN3pBa_7iI';
+const apiName = 'ducykb8gg';
+
 const CapturaDePantalla = () => {
   const [loading, setLoading] = useState(false);
   const [downloading, setDownloading] = useState(false);
-  
+
 
   const realizarCapturaDePantalla = async () => {
     try {
-      
       const canvas = await html2canvas(document.body);
       const blob = await new Promise((resolve) => {
         canvas.toBlob(resolve, 'image/png');
@@ -25,24 +29,56 @@ const CapturaDePantalla = () => {
       return url;
     } catch (error) {
       console.log('Error al realizar la captura de pantalla:', error);
-      
       return null;
     }
   };
-
 
   const subirImagenACloudinary = (archivo) => {
     return new Promise((resolve, reject) => {
       const formData = new FormData();
       formData.append('file', archivo);
-      formData.append('upload_preset','capturas');
-
-      fetch('https://api.cloudinary.com/v1_1/ducykb8gg/auto/upload', {
+      formData.append('upload_preset', 'capturas');
+  
+      fetch(`https://api.cloudinary.com/v1_1/${apiName}/auto/upload`, {
         method: 'POST',
         body: formData
       })
         .then(response => response.json())
         .then(data => {
+          const publicId = data.public_id;
+  
+          // Eliminación automática después de 48 horas
+          const deleteURL = `https://api.cloudinary.com/v1_1/${apiName}/image/destroy`;
+  
+          const params = {
+            public_id: publicId,
+            timestamp: Math.round(Date.now() / 1000), // tiempo actual en segundos
+            api_key: apiKey, 
+            signature: apiSecret 
+          };
+  
+          const deleteOptions = {
+            method: 'POST',
+            body: new URLSearchParams(params)
+          };
+  
+          // Realizar la solicitud de eliminación después de 48 horas (172800 segundos)
+          setTimeout(() => {
+            fetch(deleteURL, deleteOptions)
+              .then(deleteResponse => deleteResponse.json())
+              .then(deleteData => {
+                // Verificar si la eliminación fue exitosa
+                if (deleteData.result === 'ok') {
+                  console.log(`La imagen con public_id '${publicId}' ha sido eliminada de Cloudinary.`);
+                } else {
+                  console.log(`Error al eliminar la imagen con public_id '${publicId}' de Cloudinary.`);
+                }
+              })
+              .catch(error => {
+                console.log(`Error al realizar la eliminación de la imagen con public_id '${publicId}' de Cloudinary:`, error);
+              });
+          }, 48 * 60 * 60 * 1000); // 48 horas en milisegundos
+  
           resolve(data.secure_url);
         })
         .catch(error => {
@@ -50,17 +86,21 @@ const CapturaDePantalla = () => {
         });
     });
   };
-
+  
+  
 
   const compartirEnWhatsApp = async () => {
     setLoading(true);
+    const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     const url = await realizarCapturaDePantalla();
     if (url) {
-      const mensaje = '¡Aca están los resultados de la division!';
+      const mensaje = '¡Acá están los resultados de la división!';
       const texto = `${mensaje} ${url}`;
       const encodedTexto = encodeURIComponent(texto);
       const whatsappURL = `https://api.whatsapp.com/send?text=${encodedTexto}`;
+      const whatsappURLMovil = `whatsapp://send?text=${encodedTexto}`;
 
+      if (isMobileDevice) window.location.href = whatsappURLMovil;
       window.open(whatsappURL, '_blank');
     }
     setLoading(false);
@@ -74,7 +114,6 @@ const CapturaDePantalla = () => {
       grow: 'row',
       toast: true,
       position: 'bottom',
-      allowOutsideClick: 'false',
       allowEscapeKey: 'false',
       showConfirmButton: false,
       timer: 4000,
@@ -135,8 +174,6 @@ const CapturaDePantalla = () => {
       </Grid>
       <Grid  xs={12}>
       {loading && mostrarAlertaCargando()}
-
-        
       {downloading && mostrarAlertaDescarga()}
       </Grid>
       
