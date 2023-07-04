@@ -139,6 +139,12 @@ export default function Cuentas() {
         }
     }
 
+    const handleKeyPress = (e) => {
+        if (e.key === "Enter") {
+            handleAgregarCampo(e);
+        }
+    };
+
     const handleAgregarCampo = (e) => {
         e.preventDefault();
         if (hayCamposVacios()) {
@@ -253,6 +259,7 @@ export default function Cuentas() {
                         label="Gasto"
                         id={`gasto${index}`}
                         variant="outlined"
+                        onKeyPress={handleKeyPress}
                         required
                         size="small"
                         name="gasto"
