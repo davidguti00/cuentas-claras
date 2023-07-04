@@ -8,11 +8,10 @@ import {
   Typography
 } from '@mui/material'
 
+const apiKey = process.env.REACT_APP_API_KEY;
+const apiName = process.env.REACT_APP_CLOUD_NAME;
+const apiSecret = process.env.REACT_APP_API_SECRET;
 
-
-const apiKey = '613212145285165';
-const apiSecret = 'zbzJWO1YOWpHYQEYXnN3pBa_7iI';
-const apiName = 'ducykb8gg';
 
 const CapturaDePantalla = () => {
   const [loading, setLoading] = useState(false);
@@ -87,24 +86,7 @@ const CapturaDePantalla = () => {
     });
   };
   
-  
 
-  // const compartirEnWhatsApp = async () => {
-  //   setLoading(true);
-  //   const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-  //   const url = await realizarCapturaDePantalla();
-  //   if (url) {
-  //     const mensaje = '¡Acá están los resultados de la división!';
-  //     const texto = `${mensaje} ${url}`;
-  //     const encodedTexto = encodeURIComponent(texto);
-  //     const whatsappURL = `https://api.whatsapp.com/send?text=${encodedTexto}`;
-  //     const whatsappURLMovil = `whatsapp://send?text=${encodedTexto}`;
-
-  //     if (isMobileDevice) window.location.href = whatsappURLMovil;
-  //     window.open(whatsappURL, '_blank');
-  //   }
-  //   setLoading(false);
-  // };
 
   const compartirEnWhatsApp = async () => {
     setLoading(true);
@@ -115,33 +97,36 @@ const CapturaDePantalla = () => {
       const mensaje = '¡Acá están los resultados de la división!';
       const texto = `${mensaje} ${url}`;
       const encodedTexto = encodeURIComponent(texto);
-      const encodedUrl = encodeURIComponent(url);
-      const currentUrl = window.location.href;
-      const sharedUrl = `${currentUrl}?text=${encodedTexto}&img=${encodedUrl}`;
+      const whatsappURL = `https://api.whatsapp.com/send?text=${encodedTexto}`;
+      const whatsappURLMovil = `whatsapp://send?text=${encodedTexto}`;
   
       if (isMobileDevice) {
         // Intentar abrir enlace de WhatsApp en dispositivos móviles
         if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
           // Safari en dispositivos iOS
-          if (window.open(`whatsapp://send?text=${encodedTexto}%20${sharedUrl}`, '_blank') == null) {
+          if (window.open(whatsappURLMovil, '_blank') == null) {
             // No se pudo abrir el enlace de WhatsApp
             mostrarAlertaManual();
+            setLoading(false);
           }
         } else if (navigator.userAgent.match(/Android/i)) {
           // Navegador Android
-          if (window.open(`whatsapp://send?text=${encodedTexto}%20${sharedUrl}`, '_blank') == null) {
+          if (window.open(whatsappURLMovil, '_blank') == null) {
             // No se pudo abrir el enlace de WhatsApp
             mostrarAlertaManual();
+            setLoading(false);
           }
         } else {
           // Otros navegadores móviles
           mostrarAlertaManual();
+          setLoading(false);
         }
       } else {
         // Navegador de escritorio
-        if (window.open(`https://api.whatsapp.com/send?text=${encodedTexto}%20${sharedUrl}`, '_blank') == null) {
+        if (window.open(whatsappURL, '_blank') == null) {
           // No se pudo abrir el enlace de WhatsApp
           mostrarAlertaManual();
+          setLoading(false);
         }
       }
     }
@@ -165,7 +150,7 @@ const CapturaDePantalla = () => {
       position: 'bottom',
       allowEscapeKey: 'false',
       showConfirmButton: false,
-      timer: 4000,
+      timer: 3000,
       
     });
   };
