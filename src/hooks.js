@@ -61,3 +61,7 @@ export const dividirGastosEquitativamente = (array) => {
     }
     return deudasAjustadas;
 }
+
+
+
+

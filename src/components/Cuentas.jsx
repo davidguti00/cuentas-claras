@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {totalGastado, gastoPromedioPorPersona, dividirGastosEquitativamente} from "../hooks.js"
 import "./Cuentas.css"
 import {
@@ -26,6 +26,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import IconoCalculadora from "../image/calculadora3.png";
 import titulo from "../image/tituloCuentasClaras.png";
 import Swal from 'sweetalert2'
+import CapturaDePantalla from './CapturaDePantalla.jsx';
 
 
 
@@ -33,11 +34,24 @@ import Swal from 'sweetalert2'
 export default function Cuentas() {
 
     const [datos, setDatos] = useState([{ nombre: '', gasto: null }]);
-    const [gastosTotales, setGastosTotales] = useState("")
-    const [gastosPorPersona, setGastosPorPersona] = useState("")
-    const [resultados, setResultados] = useState([])
+    const [gastosTotales, setGastosTotales] = useState("");
+    const [gastosPorPersona, setGastosPorPersona] = useState("");
+    const [resultados, setResultados] = useState([]);
 
 
+    useEffect(() => {
+        
+        Swal.fire({
+            title: 'Bienvenido a Cuentas Claras',
+            html: 'En esta herramienta podrás calcular los gastos totales, el gasto promedio y <strong> realizar una correcta división de los  gastos entre los participantes.</strong>',
+            confirmButtonText: '¡Entendido!',
+            confirmButtonColor: '#1693a5',
+            padding: '1rem',
+            
+        });
+    }, []);
+
+    
     const usuariosUnicos = datos.reduce((usuariosAcumulados, usuarioActual) => {
         if (!usuariosAcumulados[usuarioActual.nombre]) {
             usuariosAcumulados[usuarioActual.nombre] = {
@@ -55,80 +69,64 @@ export default function Cuentas() {
     const datosFiltradosOrdenados = datosFiltrados.sort((a, b) => b.gasto - a.gasto)
 
 
-    const todosNumeros = (array) => {
-        return array.every(item => !isNaN(item.gasto));
+
+    const todosNumerosValidos = (num) => {
+        return num.every(item => /^[0-9]+(\.[0-9]+)?$/.test(item.gasto));
     }
 
-    const reemplazarComa = (datos) => {
-        const nuevosDatos = datos.map((dato) => {
-            if (typeof dato === "string" && dato.includes(",")) {
-                return dato.replace(",", ".");
-            }
-                return dato;
+
+    const ultimoObjeto = datos[datos.length - 1]
+
+    const hayCamposVacios = () => {
+        return datos.every((item) => {
+            return item.nombre && item.gasto;
         });
-        return nuevosDatos;
+    };
+
+    const reemplazarComa = (numero) => {
+        if(!validaciones.numerosValidos.test(numero)){
+            Swal.fire({
+                html:'Por favor, <br>ingresa un número valido',
+                icon: 'warning',
+                padding:'1rem',
+                grow:'row',
+                toast:true,
+                position:'top',
+                allowEscapeKey:'false',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+            })
+            return ""
+        } else if(numero.includes(',')) return numero.replace(',', '.');
+        
+        return numero;
     }
 
-    const handleAgregarCampo = (e) => {
-        const ultimoObjeto = datos[datos.length - 1];
-        if(ultimoObjeto.nombre && ultimoObjeto.gasto){
-            const numeroNuevo = ultimoObjeto.gasto;
-            if(!isNaN(numeroNuevo)) {
-                if(numeroNuevo.includes(",")) {
-                    const nuevoNumero = numeroNuevo.replace(",", ".");
-                    const nuevosDatos = [...datos.slice(0, -1), { nombre: "", gasto: nuevoNumero }];
-                    setDatos(nuevosDatos);
-                } else {
-                    setDatos([...datos, { nombre: "", gasto: "" }]);
-                }
-            } else {
-                Swal.fire({
-                    text: 'Por favor ingresa un número válido en el campo Gasto.',
-                    icon: 'warning',
-                    confirmButtonColor: '#1693a5',
-                    customClass: {
-                        popup: 'customPopupClass'
-                    },
-                })
-            }
-        } else {
-            Swal.fire({
-                text: 'Por favor completa todos los campos.',
-                icon: 'warning',
-                confirmButtonColor: '#1693a5',
-                customClass: {
-                    popup: 'customPopupClass'
-                },
-                
-            })
-        }
+    const validaciones = {
+        numerosValidos: /^[0-9,.]+$/,
+        numerosConComa: /[,]/, 
     };
 
 
 
-
-    const handleFiltrarNumero = (e) => {
-        const { value } = e.target;
-        if (value.includes(",")) {
-            const newData = datos.slice().map((obj, index) => {
-                if (index === datos.length - 1) {
-                    return { ...obj, gasto: obj.gasto.replace(",", ".") };
-                } else {
-                    return obj;
-                }
-            });
-            setDatos(newData);
-        } else {
-            return null;
+    const handleChange = (e, index) => {
+        var { name, value } = e.target;
+        if(name === "gasto" && value.length){
+            const newValue = reemplazarComa(value, index)
+            value = newValue
         }
-    }
-
-    const handleInputChange = (e, index) => {
-        handleFiltrarNumero(e)
-        const { name, value } = e.target;
         const nuevosDatos = [...datos];
         nuevosDatos[index] = { ...nuevosDatos[index], [name]: value };
-        setDatos(nuevosDatos)
+        setDatos(nuevosDatos);
+    };
+
+
+    const handleClear = (e) => {
+        e.preventDefault();
+        setDatos([{nombre:"", gasto:""}]);
+        setGastosTotales("");
+        setResultados([]);
     }
 
     const handleEliminarCampo = (e) => {
@@ -139,51 +137,88 @@ export default function Cuentas() {
         }else{
             return null
         }
-
     }
 
-
-    const handleSubmit = (e) => {
+    const handleAgregarCampo = (e) => {
         e.preventDefault();
-        if(datos[datos.length - 1].nombre && datos[datos.length - 1].gasto){
-            const nuevosDatos = reemplazarComa(datos)
-            setDatos(nuevosDatos)
-            if(todosNumeros(datos)){
-                setGastosTotales(totalGastado(datos))
-                setGastosPorPersona(gastoPromedioPorPersona(datosFiltrados))
-                setResultados(dividirGastosEquitativamente(datosFiltradosOrdenados))
-            }else {
+        if (hayCamposVacios()) {
+            setDatos(datos)
+            if(todosNumerosValidos(datos)) setDatos([...datos, { nombre: "", gasto: "" }])
+            else{
                 Swal.fire({
-                    text: 'Todos los campos Gasto deben ser un número válido',
+                    html:'Por favor, <br>ingresa números validos',
                     icon: 'warning',
-                    confirmButtonColor: '#1693a5',
-                    customClass: {
-                        popup: 'customPopupClass'
-                    },
+                    padding:'1rem',
+                    grow:'row',
+                    toast:true,
+                    position:'top',
+                    
+                    allowEscapeKey:'false',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
                 })
-            }
-        }else {
-            Swal.fire({
-                text: 'Todos los campos deben estar completos',
-                icon: 'warning',
-                confirmButtonColor: '#1693a5', 
-                customClass: {
-                    popup: 'customPopupClass'
-                },
                 
+            }
+        } else {
+            Swal.fire({
+                html:'Por favor, <br> Completa todos los campos!',
+                icon: 'warning',
+                padding:'1rem',
+                grow:'row',
+                toast:true,
+                position:'top',
+                
+                allowEscapeKey:'false',
+                showConfirmButton: false,
+                timer: 4000,
+                timerProgressBar: true,
             })
+            
         }
     };
 
-    const handleClear = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        setDatos([{nombre:"", gasto:""}])
-        setGastosTotales("")
-        setGastosPorPersona("")
-        setResultados([])
-    }
+        if (hayCamposVacios()){
+            setDatos(datos)
+            if(todosNumerosValidos(datos)){
+                setGastosTotales(totalGastado(datos))
+                setGastosPorPersona(gastoPromedioPorPersona(datosFiltrados))
+                setResultados(dividirGastosEquitativamente(datosFiltradosOrdenados))
+            } else {
+                Swal.fire({
+                    html:'<strong>Por favor, <br>ingresa números validos',
+                    icon: 'warning',
+                    padding:'1rem',
+                    grow:'row',
+                    toast:true,
+                    position:'top',
+                    
+                    allowEscapeKey:'false',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                })
+            }
+            console.log('Calculos realizados exitosamente');
+        } else {
+            Swal.fire({
+                html:'<strong>Todos los campos <br>deben estar completos',
+                icon: 'warning',
+                padding:'1rem',
+                grow:'row',
+                toast:true,
+                position:'top',
+                
+                allowEscapeKey:'false',
+                showConfirmButton: false,
+                timer: 4000,
+                timerProgressBar: true,
+            })
+        }
 
-    const ultimoObjeto = datos[datos.length - 1]
+    }
 
 
     return (
@@ -204,7 +239,7 @@ export default function Cuentas() {
                         size= "small"
                         name="nombre"
                         value={dato.nombre}
-                        onChange={(e) => handleInputChange(e, index)}
+                        onChange={(e) => handleChange(e, index)}
                         InputProps={{
                             style: {
                                 fontSize: 14,
@@ -212,10 +247,9 @@ export default function Cuentas() {
                         }}
                     />
                     </Grid>
-
                     <Grid item xs={5}>
                         <TextField
-                        type="number"
+                        //type="number"
                         label="Gasto"
                         id={`gasto${index}`}
                         variant="outlined"
@@ -223,8 +257,7 @@ export default function Cuentas() {
                         size="small"
                         name="gasto"
                         value={dato.gasto}
-                        onChange={(e) => handleInputChange(e, index)}
-                        onBlur={(e) => handleFiltrarNumero(e)}
+                        onChange={(e) => handleChange(e, index)}
                         prefix="$"
                         InputProps={{
                             style: {
@@ -233,10 +266,10 @@ export default function Cuentas() {
                                 shrink: true,
                             }
                         }}
-                    />
+                        />
                     </Grid>
                     <Grid item xs={1} >
-                        <DeleteForeverIcon sx={{fontSize: 26, cursor: "pointer", marginTop: 0.90, color:'#1693a5'}} onClick={() => handleEliminarCampo(index)} disabled={datos.length === 1} className="btn" />
+                        <DeleteForeverIcon sx={{fontSize: 26, cursor: "pointer", color:'#1693a5'}} onClick={() => handleEliminarCampo(index)} disabled={datos.length === 1} className="btn" />
                     </Grid>
                 </Grid>
                 ))}
@@ -295,7 +328,6 @@ export default function Cuentas() {
                                     </Grid>
                                     <ListItemText secondary="Gasto promedio" primary={`$ ${gastosPorPersona}`} />
                                 </Grid>
-
                         </Grid>
                     </Grid>
                 : null
@@ -329,6 +361,7 @@ export default function Cuentas() {
                                     </TableBody>
                                 </Table>
                             </TableContainer>
+                            <CapturaDePantalla/>
                         </Grid>
                     : null
                 }
@@ -336,5 +369,7 @@ export default function Cuentas() {
         </Grid>
     )
 }
+
+
 
 
