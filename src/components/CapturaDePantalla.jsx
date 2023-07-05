@@ -12,13 +12,12 @@ const apiSecret = process.env.REACT_APP_API_SECRET;
 
 
 const CapturaDePantalla = () => {
-  const [loading, setLoading] = useState(false);
   const [downloading, setDownloading] = useState(false);
-
-
+  // const [loading, setLoading] = useState(false);
+  
   // const compartirViaWhatsapp = async () => {
   //   setLoading(true);
-  //   const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
   //   const url = await capturarYCompartir();
   //   const container = document.getElementById('capturable-element');
   
@@ -27,60 +26,72 @@ const CapturaDePantalla = () => {
   //     await new Promise(resolve => {
   //       canvas.toBlob(resolve);
   //     });
-
+  
   //     if (url) {
   //       const mensaje = '¡Acá están los resultados de la división!';
   //       const texto = `${mensaje} ${url}`;
   //       const whatsappMessage = encodeURIComponent(texto);
   //       const whatsappURL = `https://api.whatsapp.com/send?text=${whatsappMessage}`;
-
-  //       if (isMobileDevice){
-  //         if(window.open(whatsappURL, '_blank')== null) mostrarAlertaError()
-  //           window.open(whatsappURL, '_blank');
-  //       }else{
-  //         window.open(whatsappURL, '_blank');
+  
+  //       const newWindow = window.open(whatsappURL, '_blank');
+  
+  //       if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+  //         mostrarAlertaError();
   //       }
-        
   //     }
   //   } catch (error) {
   //     console.log('Error al capturar y compartir:', error);
   //   }
-
+  
   //   setLoading(false);
   // };
+  
+    // const capturarYCompartir = async () => {
+  //   const container = document.getElementById('capturable-element'); 
+  //   try {
+  //     const canvas = await html2canvas(container);
+  //     const blob = await new Promise(resolve => {
+  //       canvas.toBlob(resolve);
+  //     });
+  //     const url = await subirImagenACloudinary(blob);
+  //     return url;
+  //   } catch (error) {
+  //     console.log('Error al capturar y guardar:', error);
+  //   }
+  // };
 
-  const compartirViaWhatsapp = async () => {
-    setLoading(true);
-    
-    const url = await capturarYCompartir();
-    const container = document.getElementById('capturable-element');
-  
-    try {
-      const canvas = await html2canvas(container);
-      await new Promise(resolve => {
-        canvas.toBlob(resolve);
-      });
-  
-      if (url) {
-        const mensaje = '¡Acá están los resultados de la división!';
-        const texto = `${mensaje} ${url}`;
-        const whatsappMessage = encodeURIComponent(texto);
-        const whatsappURL = `https://api.whatsapp.com/send?text=${whatsappMessage}`;
-  
-        const newWindow = window.open(whatsappURL, '_blank');
-        
-        if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
-          mostrarAlertaError();
-        }
-      }
-    } catch (error) {
-      console.log('Error al capturar y compartir:', error);
-    }
-  
-    setLoading(false);
-  };
-  
-  
+  // const mostrarAlertaCargando = () => {
+  //   Swal.fire({
+  //     html: 'Aguarda unos segundos se esta generando el enlace de la captura...',
+  //     icon: 'success',
+  //     padding: '1rem',
+  //     grow: 'row',
+  //     toast: true,
+  //     position: 'bottom',
+  //     allowEscapeKey: 'false',
+  //     showConfirmButton: false,
+  //     timer: 4000,
+      
+  //   });
+  // };
+
+   // const mostrarAlertaError = () => {
+  //   Swal.fire({
+  //     html: 'Tu dispositivo no es compatible para generar esta accion,<br><strong> te recomendamos que descargues la captura y la compartas manualmente!',
+  //     icon: 'error',
+  //     padding: '1rem',
+  //     grow: 'row',
+  //     toast: true,
+  //     position: 'center',
+  //     allowOutsideClick: 'false',
+  //     allowEscapeKey: 'false',
+  //     showConfirmButton: true,
+  //     confirmButtonColor: '#1693a5',
+      
+  //   });
+  // };
+
+
   const capturarYGuardar = async () => {
     setDownloading(true);
     const container = document.getElementById('capturable-element'); 
@@ -97,21 +108,6 @@ const CapturaDePantalla = () => {
     }
     setDownloading(false);
   };
-
-  const capturarYCompartir = async () => {
-    const container = document.getElementById('capturable-element'); 
-    try {
-      const canvas = await html2canvas(container);
-      const blob = await new Promise(resolve => {
-        canvas.toBlob(resolve);
-      });
-      const url = await subirImagenACloudinary(blob);
-      return url;
-    } catch (error) {
-      console.log('Error al capturar y guardar:', error);
-    }
-  };
-
 
   const subirImagenACloudinary = (archivo) => {
     return new Promise((resolve, reject) => {
@@ -141,7 +137,6 @@ const CapturaDePantalla = () => {
             method: 'POST',
             body: new URLSearchParams(params)
           };
-  
           // Realizar la solicitud de eliminación después de 48 horas (172800 segundos)
           setTimeout(() => {
             fetch(deleteURL, deleteOptions)
@@ -167,21 +162,6 @@ const CapturaDePantalla = () => {
     });
   };
   
-  const mostrarAlertaCargando = () => {
-    Swal.fire({
-      html: 'Aguarda unos segundos se esta generando el enlace de la captura...',
-      icon: 'success',
-      padding: '1rem',
-      grow: 'row',
-      toast: true,
-      position: 'bottom',
-      allowEscapeKey: 'false',
-      showConfirmButton: false,
-      timer: 4000,
-      
-    });
-  };
-
   const mostrarAlertaDescarga = () => {
     Swal.fire({
       html: 'Descargando...',
@@ -197,40 +177,23 @@ const CapturaDePantalla = () => {
       
     });
   };
-
-  const mostrarAlertaError = () => {
-    Swal.fire({
-      html: 'Tu dispositivo no es compatible para generar esta accion,<br><strong> te recomendamos que descargues la captura y la compartas manualmente!',
-      icon: 'error',
-      padding: '1rem',
-      grow: 'row',
-      toast: true,
-      position: 'center',
-      allowOutsideClick: 'false',
-      allowEscapeKey: 'false',
-      showConfirmButton: true,
-      confirmButtonColor: '#1693a5',
-      
-    });
-  };
-
   
   return (
     <Grid container xs={12} justifyContent="center" marginTop={"15px"} >
-      <Grid container item xs={4} direction="column" justifyContent="center"  alignItems="center" sx={{ marginBottom:"20px"}} >
+      {/* <Grid container item xs={4} direction="column" justifyContent="center"  alignItems="center" sx={{ marginBottom:"20px"}} >
         <WhatsAppIcon sx={{fontSize: 28, cursor: "pointer", marginTop: 0.90, color:'#1693a5'}}  onClick={compartirViaWhatsapp} />
           <Typography color="textSecondary" variant="body3">
               Compartir
           </Typography>
-      </Grid>
-      <Grid container item xs={4} direction="column" justifyContent="center"  alignItems="center" sx={{ marginBottom:"20px"}}>
+      </Grid> */}
+      <Grid container item xs={10} direction="column" justifyContent="center"  alignItems="center" sx={{ marginBottom:"20px"}}>
         <CloudDownloadIcon sx={{fontSize: 28, cursor: "pointer", marginTop: 0.90, color:'#1693a5'}} onClick={capturarYGuardar} />
           <Typography color="textSecondary" variant="body3">
-              Descargar
+              Descargar resultados para compartir
           </Typography>
       </Grid>
       <Grid  xs={12}>
-      {loading && mostrarAlertaCargando()}
+      {/* {loading && mostrarAlertaCargando()} */}
       {downloading && mostrarAlertaDescarga()}
       </Grid>
       
