@@ -158,7 +158,6 @@ export default function Cuentas() {
                     grow:'row',
                     toast:true,
                     position:'top',
-                    
                     allowEscapeKey:'false',
                     showConfirmButton: false,
                     timer: 3000,
@@ -174,7 +173,6 @@ export default function Cuentas() {
                 grow:'row',
                 toast:true,
                 position:'top',
-                
                 allowEscapeKey:'false',
                 showConfirmButton: false,
                 timer: 4000,
@@ -200,7 +198,6 @@ export default function Cuentas() {
                     grow:'row',
                     toast:true,
                     position:'top',
-                    
                     allowEscapeKey:'false',
                     showConfirmButton: false,
                     timer: 3000,
@@ -216,7 +213,6 @@ export default function Cuentas() {
                 grow:'row',
                 toast:true,
                 position:'top',
-                
                 allowEscapeKey:'false',
                 showConfirmButton: false,
                 timer: 4000,
@@ -228,7 +224,7 @@ export default function Cuentas() {
 
 
     return (
-        <Grid item container xs={12} md={6} lg={4} xl={3} sx={{ marginTop: "40px", marginBottom: "40px" }} className="container">
+        <Grid item container xs={12} md={6} lg={4} xl={3} sx={{ marginTop: "40px", marginBottom: "40px" }} className="container" id="capturable-element">
             <Grid item xs={12} sx={{ marginTop:"40px", marginBottom:"40px"}}>
                 <img src={titulo} alt="Titulo de la página" style={{ width: '300px', height: 'auto' }} />
             </Grid>
