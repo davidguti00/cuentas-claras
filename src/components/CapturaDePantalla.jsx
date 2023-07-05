@@ -16,9 +16,42 @@ const CapturaDePantalla = () => {
   const [downloading, setDownloading] = useState(false);
 
 
+  // const compartirViaWhatsapp = async () => {
+  //   setLoading(true);
+  //   const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  //   const url = await capturarYCompartir();
+  //   const container = document.getElementById('capturable-element');
+  
+  //   try {
+  //     const canvas = await html2canvas(container);
+  //     await new Promise(resolve => {
+  //       canvas.toBlob(resolve);
+  //     });
+
+  //     if (url) {
+  //       const mensaje = '¡Acá están los resultados de la división!';
+  //       const texto = `${mensaje} ${url}`;
+  //       const whatsappMessage = encodeURIComponent(texto);
+  //       const whatsappURL = `https://api.whatsapp.com/send?text=${whatsappMessage}`;
+
+  //       if (isMobileDevice){
+  //         if(window.open(whatsappURL, '_blank')== null) mostrarAlertaError()
+  //           window.open(whatsappURL, '_blank');
+  //       }else{
+  //         window.open(whatsappURL, '_blank');
+  //       }
+        
+  //     }
+  //   } catch (error) {
+  //     console.log('Error al capturar y compartir:', error);
+  //   }
+
+  //   setLoading(false);
+  // };
+
   const compartirViaWhatsapp = async () => {
     setLoading(true);
-    const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
     const url = await capturarYCompartir();
     const container = document.getElementById('capturable-element');
   
@@ -27,27 +60,26 @@ const CapturaDePantalla = () => {
       await new Promise(resolve => {
         canvas.toBlob(resolve);
       });
-
+  
       if (url) {
         const mensaje = '¡Acá están los resultados de la división!';
         const texto = `${mensaje} ${url}`;
         const whatsappMessage = encodeURIComponent(texto);
         const whatsappURL = `https://api.whatsapp.com/send?text=${whatsappMessage}`;
-
-        if (isMobileDevice){
-          if(window.open(whatsappURL, '_blank')== null) mostrarAlertaError()
-            window.open(whatsappURL, '_blank');
-        }else{
-          window.open(whatsappURL, '_blank');
-        }
+  
+        const newWindow = window.open(whatsappURL, '_blank');
         
+        if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+          mostrarAlertaError();
+        }
       }
     } catch (error) {
       console.log('Error al capturar y compartir:', error);
     }
-
-  setLoading(false);
-};
+  
+    setLoading(false);
+  };
+  
   
   const capturarYGuardar = async () => {
     setDownloading(true);
